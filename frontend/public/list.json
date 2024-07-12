@@ -1,0 +1,115 @@
+[
+  {
+    "id": 1,
+    "name": "chicken tikka",
+    "title": "The Chicken Tikka is a delightful fusion of Indian and afgani ",
+    "price":"$100",
+    "category":"maincourse",
+    "image":"https://startuppakistan.com.pk/wp-content/uploads/2023/06/Downloader.la-649c6057ce661.jpg"
+  },
+  {
+    "id": 2,
+    "name": "Dill Pickle Pasta",
+    "title": "The Dill Pickle Pasta Salad is a delightful fusion of the Italian cuisines,",
+    "price":"$100",
+    "category":"maincourse",
+    "image":"https://foodieandwine.com/wp-content/uploads/2021/11/Dill_Pickle_Pasta_Salad_3.jpg"
+  },
+  {
+    "id": 3,
+    "name": "Sweet Potato Fries",
+    "title": "The Sweet Potato Fries is a delightful fusion of Indian and Western cuisines,",
+    "price":"$100",
+    "category":"starter",
+    "image":"https://www.thespruceeats.com/thmb/XKirQ9SZiDTHwisIum92mr2Y8G0=/6016x4000/filters:fill(auto,1)/sweet-potato-fries-3061587-hero-01-a8a7c65e49924b9887ab31a78799a43d.jpg"
+  },
+  {
+    "id": 4,
+    "name": "Onion Rings",
+    "title": "The Onion Rings is a delightful fusion of Indian and Western cuisines,",
+    "price":"$100",
+    "category":"starter",
+    "image":"https://burgerbites.be/wp-content/uploads/2020/03/onion-rings-2048x1367.jpg"
+  },
+  {
+    "id": 5,
+    "name": "virgin mojito",
+    "title": "The virgin mojito is a delightful fusion of Western cuisines,",
+    "price":"$100",
+    "category":"beverages",
+    "image":"https://th.bing.com/th/id/R.caa76a78286a1861a083444c5154f49a?rik=Qx4dd2lJHrMbrQ&riu=http%3a%2f%2fjuicemachine.org%2fwp-content%2fuploads%2f2014%2f04%2fvirgin-mojito-juiced-19902401_m.jpg&ehk=EmPs3mGUPQC%2fV3u7Ot5iYr6wk7XLrXUa0Kjjs1RtFBM%3d&risl=&pid=ImgRaw&r=0"
+  },
+  {
+    "id": 6,
+    "name": "Peri Peri French Fries",
+    "title": "The Peri Peri French Fries is a delightful fusion of Western cuisines,",
+    "price":"$100",
+    "category":"starter",
+    "image":"https://th.bing.com/th/id/OIP.uEc0EvqL2FybF6kaUBM7hwHaE8?rs=1&pid=ImgDetMain"
+  },
+  {
+    "id": 7,
+    "name": "Fried Pickles",
+    "title": "The Fried Pickles is a delightful fusion of Indian and Western cuisines,",
+    "price":"$100",
+    "category":"starter",
+    "image":"https://iambaker.net/wp-content/uploads/2019/07/fried-pickles-7.jpg"
+  },
+  {
+    "id": 8,
+    "name": "Loaded Baked Potato",
+    "title": "The Loaded Baked Potato Salad is a delightful fusion of Western cuisines,",
+    "price":"$100",
+    "category":"starter",
+    "image":"https://sweetpeaskitchen.com/wp-content/uploads/2020/12/Loaded-Baked-Potato-5-scaled.jpg"
+  },
+  {
+    "id": 9,
+    "name": "lime soda waker",
+    "title": "The lime soda waker is a delightful fusion of Indian beverages,",
+    "price":"$80",
+    "category":"starter",
+    "image":"https://3.imimg.com/data3/IM/UA/MY-9717450/squash-drink-250x250.jpg"
+  },
+  {
+    "id": 10,
+    "name": "Butter Mushrooms",
+    "title": "The Chicken Tikka Burger is a delightful fusion of Indian and Western cuisines,",
+    "price":"$100",
+    "category":"maincourse",
+    "image":"https://th.bing.com/th/id/OIP.ELwff3bTn_LhBNGHlCsppwHaE8?rs=1&pid=ImgDetMain"
+  },
+
+  {
+    "id": 11,
+    "name": "Garlic Butter Noodle",
+    "title": "The Garlic Butter Noodle is a delightful fusion of Indian and Western cuisines,",
+    "price":"$100",
+    "category":"maincourse",
+    "image":"https://lindseyelmore.com/wp-content/uploads/2019/10/spaghetti-with-marinara.webp"
+  },
+  {
+    "id": 12,
+    "name": "chicken wings",
+    "title": "The chicken wings is a delightful fusion of american cuisines,",
+    "price":"$100",
+    "category":"starter",
+    "image":"https://cullyskitchen.com/wp-content/uploads/2022/02/Fry-Chicken-Wings-1536x1024.jpeg"
+  },
+  {
+    "id": 13,
+    "name": "manchurian dry sticks",
+    "title": "The manchurian dry sticks is a delightful fusion of chineses cuisines,",
+    "price":"$100",
+    "category":"starter",
+    "image":"https://th.bing.com/th/id/OIP.Y53As3TUWAKDPW7rMF0OeQHaE8?rs=1&pid=ImgDetMain"
+  },
+  {
+    "id": 14,
+    "name": "spring roll",
+    "title": "The spring roll is a delightful fusion of japan cuisines,",
+    "price":"$100",
+    "category":"starter",
+    "image":"https://th.bing.com/th/id/OIP.wl_Sp8XtveK_JpDucAKkQQHaE_?rs=1&pid=ImgDetMain"
+  }
+]

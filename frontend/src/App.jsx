@@ -1,0 +1,22 @@
+import React from 'react'
+import Home from './home/Home'
+import { Route,Routes } from 'react-router-dom'
+import Menu from '../src/menu/menu'
+import Signup from './components/signup'
+import Contact from '../src/Contactform/contactform'
+function App() {
+  return (
+    <>
+    <div className="dark:bg-slate-900 dark:text-white">
+    <Routes>
+      <Route path='/' element={<Home/>}/>
+      <Route path='/Menu' element={<Menu/>}/>
+      <Route path='/signup' element={<Signup/>}/>
+      <Route path='/contact' element={<Contact/>}/>
+    </Routes>
+    </div>
+    </>
+  )
+}
+
+export default App
