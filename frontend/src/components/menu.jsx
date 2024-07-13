@@ -1,14 +1,29 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Card from "./card";
-import list from "../../public/list.json";
+import axios from "axios";
 import { Link } from "react-router-dom";
 
 function Menu() {
+  const [menu, setMenu] = useState([]);
+
+  useEffect(() => {
+    const getMenu = async () => {
+      try {
+        const res = await axios.get("http://localhost:4001/menu");
+        console.log(res.data);
+        setMenu(res.data);
+      } catch (error) {
+        console.log("error", error);
+      }
+    };
+    getMenu();
+  }, []);
+
   return (
     <div className="max-w-screen-2xl container mx-auto md:px-20 px-4">
       <div className="mt-28 items-center justify-center text-center">
         <h1 className="text-2xl md:text-4xl">
-          <span className="text-yellow-500">Explorer Cafe Menu</span>
+          <span className="text-yellow-500">Explore Cafe Menu</span>
         </h1>
         <p className="mt-12">
           Lorem ipsum dolor sit amet consectetur adipisicing elit. Aliquam
@@ -27,8 +42,8 @@ function Menu() {
         </Link>
       </div>
       <div className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-6">
-        {list.map((item) => (
-          <Card key={item.id} item={item} />
+        {menu.map((item) => (
+          <Card key={item._id} item={item} />
         ))}
       </div>
     </div>

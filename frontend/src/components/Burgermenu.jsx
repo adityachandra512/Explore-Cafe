@@ -1,13 +1,28 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useState} from 'react';
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Slider from "react-slick";
-import list from "../../public/list.json";
+import axios from 'axios';
 import Card from './card'; // Ensure that the component is correctly imported
 
 function Burgermenu() {
-  const filterData = list.filter((data) => data.category === 'starter');
-  
+  const [menu, setMenu] = useState([]);
+  useEffect(() => {
+    const getMenu = async () => {
+      try {
+        const res = await axios.get("http://localhost:4001/menu");
+        
+        const data=res.data.filter((data) => data.category === 'starter');
+         console.log(data);
+        setMenu(data);
+      } catch (error) {
+        console.log("error", error);
+      }
+    };
+    getMenu();
+  }, []);
+
   var settings = {
     dots: true,
     infinite: false,
@@ -50,7 +65,7 @@ function Burgermenu() {
       </div>
       <div className='pt-10'>
         <Slider {...settings}>
-          {filterData.map((item) => (
+          {menu.map((item) => (
             <Card item={item} key={item.id} />
           ))}
         </Slider>
