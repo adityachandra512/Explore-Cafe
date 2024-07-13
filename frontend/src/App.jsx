@@ -3,6 +3,7 @@ import Home from './home/Home'
 import { Navigate, Route,Routes } from 'react-router-dom'
 import Menu from '../src/menu/menu'
 import Signup from './components/signup'
+import About from '../src/aboutus/aboutus'
 import { Toaster } from 'react-hot-toast';
 import Contact from '../src/Contactform/contactform'
 import { userAuth } from './context/AuthProvider'
@@ -18,6 +19,7 @@ function App() {
       <Route path='/Menu' element={authUser?<Menu/>:<Navigate to="/signup"/>}/>
       <Route path='/signup' element={<Signup/>}/>
       <Route path='/contact' element={<Contact/>}/>
+      <Route path='/about' element={<About/>}/>
     </Routes>
     <Toaster/>
     </div>
