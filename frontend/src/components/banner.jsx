@@ -8,7 +8,7 @@ function banner() {
           <div className="space-y-12">
             <h1 className="text-4xl font-bold">
               IT IS A GOOD TIME FOR THE GREAT{" "}
-              <span className="text-yellow-700">TASTE OF BURGER</span>
+              <span className="text-yellow-700">TASTE OF FOOD</span>
             </h1>
             <p className="text-xl">
               Lorem ipsum dolor sit amet, consectetur adipisicing elit.
