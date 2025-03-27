@@ -1,13 +1,14 @@
-import express from "express";
-import mongoose from "mongoose";
-import dotenv from "dotenv";
-import cors from "cors";
-import menuRoute from "./route/menu.route.js";
-import userRouter from "./route/user.route.js";
-
-dotenv.config(); // Load environment variables
+import express from 'express';
+import cors from 'cors';
+import mongoose from 'mongoose';
+import dotenv from 'dotenv';
+import menuRoute from './route/menu.route.js';
+import userRouter from './route/user.route.js';
+import feedbackRouter from './route/feedback.js';
 
 const app = express();
+dotenv.config();
+
 const PORT = process.env.PORT || 4000;
 const URI = process.env.MONGODB_URI; // Ensure the environment variable name matches your .env file
 
@@ -27,6 +28,9 @@ mongoose.connect(URI, {
 // Defining routes
 app.use("/menu", menuRoute);
 app.use("/user", userRouter);
+
+// Add feedback route
+app.use('/feedback', feedbackRouter);
 
 app.listen(PORT, () => {
     console.log(`Server is listening on port ${PORT}`);

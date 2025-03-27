@@ -7,3 +7,36 @@
 body{
     font-family: 'Poppins','sans-serif';
 }
+
+.starter-slider .slick-dots li button:before {
+  color: #ca8a04;
+}
+
+.starter-slider .slick-dots li.slick-active button:before {
+  color: #ca8a04;
+}
+
+.starter-slider .slick-prev:before,
+.starter-slider .slick-next:before {
+  color: #ca8a04;
+  font-size: 24px;
+}
+
+.starter-slider .slick-slide {
+  transition: all 0.3s ease;
+}
+
+.starter-slider .slick-slide:hover {
+  transform: translateY(-5px);
+}
+
+
+@layer base {
+  body {
+    @apply bg-white text-gray-900 transition-colors duration-200;
+  }
+  
+  body.dark {
+    @apply bg-gray-900 text-white;
+  }
+}

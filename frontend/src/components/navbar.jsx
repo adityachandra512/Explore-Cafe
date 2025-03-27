@@ -2,8 +2,9 @@ import React, { useEffect, useState } from "react";
 import Login from "./login";
 import Logout from "./logout";
 import { userAuth } from "../context/AuthProvider";
+
 function Navbar() {
-  const [authUser,setAuthUser]=userAuth()
+  const [authUser, setAuthUser] = userAuth();
   const [theme, setTheme] = useState(localStorage.getItem("theme") ? localStorage.getItem("theme") : "light");
   const element = document.documentElement;
 
@@ -37,45 +38,73 @@ function Navbar() {
 
   const navItem = (
     <>
-      <li>
-        <a href="/">Home</a>
+      <li className="hover:text-orange-600 transition-colors duration-300">
+        <a href="/" className="flex items-center gap-2">
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+          </svg>
+          Home
+        </a>
       </li>
-      <li>
-        <a href="/menu">Menu</a>
+      <li className="hover:text-orange-600 transition-colors duration-300">
+        <a href="/menu" className="flex items-center gap-2">
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+          </svg>
+          Menu
+        </a>
       </li>
-      <li>
-        <a href="/contact">Contact</a>
+      <li className="hover:text-orange-600 transition-colors duration-300">
+        <a href="/contact" className="flex items-center gap-2">
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+          </svg>
+          Contact
+        </a>
       </li>
-      <li>
-        <a href="/about">About</a>
+      <li className="hover:text-orange-600 transition-colors duration-300">
+        <a href="/about" className="flex items-center gap-2">
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          About
+        </a>
       </li>
     </>
   );
 
   return (
-    <div className={`w-full px-10 fixed top-0 left-0 right-0 z-50 ${sticky ? "shadow-md bg-yellow-500 duration-300 transition-all ease-in-out" : "bg-yellow-400 text-white"}`}>
-      <div className="navbar px-2">
+    <div className={`w-full px-10 fixed top-0 left-0 right-0 z-50 ${
+      sticky 
+        ? "shadow-lg bg-white/90 dark:bg-gray-900/90 backdrop-blur-sm duration-300 transition-all ease-in-out border-b border-gray-200 dark:border-gray-700" 
+        : "bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm"
+    }`}>
+      <div className="navbar px-2 py-4 max-w-7xl mx-auto">
         <div className="navbar-start">
           <div className="dropdown">
-            <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden">
+            <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden dark:text-white">
               <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h8m-8 6h16" />
               </svg>
             </div>
-            <ul tabIndex={0} className="menu menu-sm dropdown-content bg-yellow-500 rounded-box z-[1] mt-3 w-52 p-2 shadow font-bold">
+            <ul tabIndex={0} className="menu menu-sm dropdown-content bg-white dark:bg-gray-900 dark:text-white rounded-box z-[1] mt-3 w-52 p-2 shadow-lg font-medium">
               {navItem}
             </ul>
           </div>
-          <a className="text-2xl font-bold cursor-pointer">Explorer Cafe</a>
+          <a className="text-2xl font-bold cursor-pointer flex items-center gap-2 text-orange-600">
+            Explorer Cafe
+          </a>
         </div>
         <div className="navbar-end space-x-3">
           <div className="navbar-center hidden lg:flex">
-            <ul className="menu menu-horizontal px-1">{navItem}</ul>
+            <ul className="menu menu-horizontal px-1 font-medium dark:text-white">{navItem}</ul>
           </div>
           <div className="hidden md:block">
-            <label className="px-3 py-2 border border-yellow-500 bg-yellow-200 rounded-md flex items-center gap-2">
-              <input type="text" className="grow outline-none bg-yellow-200 dark:bg-yellow-200 dark: text-white " placeholder="Search" />
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" className="h-4 w-4 opacity-70">
+            <label className="px-3 py-2 border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 rounded-full flex items-center gap-2 hover:border-orange-600 transition-colors duration-300">
+              <input type="text" 
+                className="grow outline-none bg-transparent w-40 text-gray-700 dark:text-gray-200" 
+                placeholder="Search menu..." />
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" className="h-4 w-4 text-gray-400 dark:text-gray-500">
                 <path fillRule="evenodd" d="M9.965 11.026a5 5 0 1 1 1.06-1.06l2.755 2.754a.75.75 0 1 1-1.06 1.06l-2.755-2.754ZM10.5 7a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0Z" clipRule="evenodd" />
               </svg>
             </label>
