@@ -5,6 +5,8 @@ import dotenv from 'dotenv';
 import menuRoute from './route/menu.route.js';
 import userRouter from './route/user.route.js';
 import feedbackRouter from './route/feedback.js';
+// Update this line
+import ordersRoute from './route/orders.js';
 
 const app = express();
 dotenv.config();
@@ -28,6 +30,7 @@ mongoose.connect(URI, {
 // Defining routes
 app.use("/menu", menuRoute);
 app.use("/user", userRouter);
+app.use('/orders', ordersRoute);
 
 // Add feedback route
 app.use('/feedback', feedbackRouter);

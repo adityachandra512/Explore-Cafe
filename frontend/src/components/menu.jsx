@@ -23,7 +23,19 @@ function Menu() {
     getMenu();
   }, []);
 
-  const categories = ['all', 'starter', 'main course', 'dessert', 'beverage'];
+  // Update the categories array with more specific options
+  const categories = [
+    'all',
+    'appetizers',
+    'soups & salads',
+    'maincourse',
+    'breads',
+    'rice & biryani',
+    'chinese',
+    'desserts',
+    'beverages',
+    'starter'
+  ];
   const filteredMenu = activeCategory === 'all' 
     ? menu 
     : menu.filter(item => item.category === activeCategory);
@@ -60,11 +72,11 @@ function Menu() {
               onClick={() => setActiveCategory(category)}
               className={`px-6 py-2 rounded-full capitalize transition-all duration-300 ${
                 activeCategory === category
-                  ? 'bg-yellow-600 dark:bg-yellow-600 text-white'
+                  ? 'bg-yellow-600 dark:bg-yellow-600 text-white shadow-lg'
                   : 'bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700'
               }`}
             >
-              {category}
+              {category === 'all' ? 'All Items' : category}
             </button>
           ))}
         </div>
