@@ -3,10 +3,11 @@ import { login, signup, getAllUsers, updateUser, deleteUser } from "../controlle
 
 const router = express.Router()
 
+// Add validation middleware
 router.post("/signup", signup)
 router.post("/login", login)
-router.get("/", getAllUsers)  // Changed from "/admin" to "/" to match frontend
-router.put("/:id", updateUser)    // Add this route for updating users
-router.delete("/:id", deleteUser) // Add this route for deleting users
+router.get("/", getAllUsers)
+router.put("/:id", updateUser)
+router.delete("/:id", deleteUser)
 
 export default router;

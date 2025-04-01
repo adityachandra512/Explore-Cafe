@@ -28,7 +28,7 @@ function Login() {
           navigate("/");
         }
       } else {
-        const res = await axios.post("http://localhost:4001/user/login", {
+        const res = await axios.post("http://localhost:4001/users/login", {
           email: data.email,
           password: data.password,
         });
