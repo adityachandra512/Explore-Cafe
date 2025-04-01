@@ -8,6 +8,11 @@ import { Toaster } from 'react-hot-toast';
 import Contact from '../src/Contactform/contactform'
 import { userAuth } from './context/AuthProvider'
 import Order from './components/order'
+import Admin from './admin/admin'
+import AdminLayout from './admin/AdminLayout';
+import OrderAdmin from './admin/orderAdmin';
+import MenuAddition from './admin/menuaddition';
+import Users from './admin/users';
 
 function App() {
   const[authUser,setAuthUser]=userAuth()
@@ -23,6 +28,13 @@ function App() {
       <Route path='/contact' element={<Contact/>}/>
       <Route path='/about' element={<About/>}/>
       <Route path="/order" element={<Order />} />
+      <Route path="/admin" element={<AdminLayout />}>
+        <Route path="orders" element={<OrderAdmin />} />
+        <Route index element={<Admin />} />
+        <Route path="menu" element={<MenuAddition />} />
+        <Route path="/admin/users" element={<Users />} />
+        {/* Add other admin routes here */}
+      </Route>
     </Routes>
     <Toaster/>
     </div>

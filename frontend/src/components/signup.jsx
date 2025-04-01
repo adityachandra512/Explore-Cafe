@@ -26,7 +26,13 @@ function Signup() {
       if (res.data) {
         toast.success("Signup successful!");
         localStorage.setItem("user", JSON.stringify(res.data.user));
-        navigate(from, { replace: true });
+        
+        // Check if the user is admin
+        if (data.email === "aditya_chandra@srmap.edu.in") {
+          navigate("/admin", { replace: true });
+        } else {
+          navigate(from, { replace: true });
+        }
       }
     } catch (err) {
       if (err.response) {

@@ -36,8 +36,13 @@ function Login() {
           toast.success("Login successful");
           document.getElementById("my_modal_3").close();
           setTimeout(() => {
-            window.location.reload();
             localStorage.setItem("user", JSON.stringify(res.data.user));
+            // Check if the user is admin and redirect accordingly
+            if (data.email === "aditya_chandra@srmap.edu.in") {
+              navigate("/admin");
+            } else {
+              window.location.reload();
+            }
           }, 1000);
         }
       }

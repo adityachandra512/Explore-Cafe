@@ -45,3 +45,52 @@ export const login=async(req,res)=>{
         console.log("Error"+error.message)
     }
 }
+
+// Add this new function to get all users
+export const getAllUsers = async (req, res) => {
+    try {
+        const users = await User.find({}, { password: 0 }); // Exclude password field
+        res.status(200).json(users);
+    } catch (error) {
+        console.log("Error: " + error.message);
+        res.status(500).json({ message: "Error fetching users" });
+    }
+};
+
+export const updateUser = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { fullname, email } = req.body;
+        
+        const updatedUser = await User.findByIdAndUpdate(
+            id,
+            { fullname, email },
+            { new: true, select: '-password' }
+        );
+        
+        if (!updatedUser) {
+            return res.status(404).json({ message: "User not found" });
+        }
+        
+        res.status(200).json(updatedUser);
+    } catch (error) {
+        console.log("Error: " + error.message);
+        res.status(500).json({ message: "Error updating user" });
+    }
+};
+
+export const deleteUser = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const deletedUser = await User.findByIdAndDelete(id);
+        
+        if (!deletedUser) {
+            return res.status(404).json({ message: "User not found" });
+        }
+        
+        res.status(200).json({ message: "User deleted successfully" });
+    } catch (error) {
+        console.log("Error: " + error.message);
+        res.status(500).json({ message: "Error deleting user" });
+    }
+};
