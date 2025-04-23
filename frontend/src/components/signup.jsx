@@ -23,12 +23,13 @@ function Signup() {
 
     try {
       const res = await axios.post("http://localhost:4001/users/signup", userInfo);
+      // Inside onSubmit function
       if (res.data) {
         toast.success("Signup successful!");
         localStorage.setItem("user", JSON.stringify(res.data.user));
         
-        // Check if the user is admin
-        if (data.email === "aditya_chandra@srmap.edu.in") {
+        // Fix the admin check condition
+        if (data.email === "aditya_chandra@srmap.edu.in" || data.email === "satyam_maurya@srmap.edu.in" || data.email === "sv876773@gmail.com") {
           navigate("/admin", { replace: true });
         } else {
           navigate(from, { replace: true });

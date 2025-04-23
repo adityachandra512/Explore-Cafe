@@ -27,7 +27,8 @@ function Users() {
 
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem('user'));
-    if (!user || user.email !== 'aditya_chandra@srmap.edu.in') {
+    // Fix the admin check condition
+    if (!user || !(user.email === 'aditya_chandra@srmap.edu.in' || user.email === 'satyam_maurya@srmap.edu.in' || user.email === 'sv876773@gmail.com')) {
       navigate('/', { replace: true });
       return;
     }

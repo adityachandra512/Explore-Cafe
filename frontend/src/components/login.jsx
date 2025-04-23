@@ -32,13 +32,14 @@ function Login() {
           email: data.email,
           password: data.password,
         });
+        // Change the condition from || to &&
         if (res.data) {
           toast.success("Login successful");
           document.getElementById("my_modal_3").close();
           setTimeout(() => {
             localStorage.setItem("user", JSON.stringify(res.data.user));
-            // Check if the user is admin and redirect accordingly
-            if (data.email === "aditya_chandra@srmap.edu.in") {
+            // Fix the admin check condition
+            if (data.email === "aditya_chandra@srmap.edu.in" || data.email === "satyam_maurya@srmap.edu.in" || data.email === "sv876773@gmail.com") {
               navigate("/admin");
             } else {
               window.location.reload();
