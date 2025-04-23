@@ -1,6 +1,8 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import profile from "../../public/image/profilepic.jpg";
+import satyam from "../../public/image/satyam.jpg";
+import avadhesh from "../../public/image/avadhesh.jpg";
 
 const AboutUs = () => {
   // Animation configurations
@@ -32,21 +34,21 @@ const AboutUs = () => {
       {
         name: "Satyam Maurya",
         role: "Co-Founder & Head Chef",
-        image: "https://images.unsplash.com/photo-1583394838336-acd977736f90?q=80&w=1968&auto=format&fit=crop",
+        image: satyam,
         description: "A culinary maestro with 8 years of experience, crafting dishes that beautifully bridge traditional and contemporary cuisines.",
         social: {
-          linkedin: "https://linkedin.com/in/rahul-sharma",
-          instagram: "https://instagram.com/chef.rahul"
+          linkedin: "https://www.linkedin.com/in/satyam-maurya-643b48258/",
+          instagram: "https://www.instagram.com/maurya_satyam_21/"
         }
       },
       {
         name: "Avadhesh Kumar",
         role: "Co-Founder & Operations Director",
-        image: "https://images.unsplash.com/photo-1598346762291-aee88549193f?q=80&w=2070&auto=format&fit=crop",
+        image: avadhesh ,
         description: "An expert in operational excellence, ensuring seamless experiences and setting new standards in customer service.",
         social: {
-          linkedin: "https://linkedin.com/in/priya-patel",
-          instagram: "https://instagram.com/priya.patel"
+          linkedin: "https://www.linkedin.com/in/avadhesh-kumar-316875258/",
+          instagram: "https://www.instagram.com/official_avadhesh_45/?__pwa=1"
         }
       }
   ];

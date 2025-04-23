@@ -1,6 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import delivery from '../../public/image/delivery.gif';
+import delivery from '../../public/image/giphy.gif';
 
 function Banner() {
   const navigate = useNavigate();
