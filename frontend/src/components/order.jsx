@@ -14,8 +14,8 @@ function Order() {
   });
 
   // Razorpay configuration - Replace with your actual keys
-  const RAZORPAY_KEY_ID = 'rzp_test_g7TNWadsrEsyMV'; // Replace with your Razorpay Key ID
-  const RAZORPAY_SECRET = 'hZMBOQMAxE9LVzEGznxnUC9X'; // This should be kept on backend for security
+  const RAZORPAY_KEY_ID = ''; // Replace with your Razorpay Key ID
+  const RAZORPAY_SECRET = ''; // This should be kept on backend for security
 
   // In your useEffect of Order component
   useEffect(() => {
