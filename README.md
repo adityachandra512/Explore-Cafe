@@ -14,6 +14,12 @@ Explore Cafe is designed to elevate the restaurant experience with its robust fe
 
 ---
 
+## Screenshots 📸
+
+### 🎨 Home Page
+![Home Page](https://github.com/adityachandra512/soundHive/blob/master/public/Homepage.png)
+
+
 ## 🛠️ Tech Stack Spotlight
 
 Explore Cafe leverages a powerful combination of technologies to deliver its seamless performance:
