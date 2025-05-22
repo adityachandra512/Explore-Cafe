@@ -13,6 +13,7 @@ import AdminLayout from './admin/AdminLayout';
 import OrderAdmin from './admin/orderAdmin';
 import MenuAddition from './admin/menuaddition';
 import Users from './admin/users';
+import Profile from './components/Profile';
 
 function App() {
   const[authUser,setAuthUser]=userAuth()
@@ -28,12 +29,12 @@ function App() {
       <Route path='/contact' element={<Contact/>}/>
       <Route path='/about' element={<About/>}/>
       <Route path="/order" element={<Order />} />
+      <Route path="/profile" element={authUser ? <Profile /> : <Navigate to="/signup" />} />
       <Route path="/admin" element={<AdminLayout />}>
         <Route path="orders" element={<OrderAdmin />} />
         <Route index element={<Admin />} />
         <Route path="menu" element={<MenuAddition />} />
         <Route path="/admin/users" element={<Users />} />
-        {/* Add other admin routes here */}
       </Route>
     </Routes>
     <Toaster/>

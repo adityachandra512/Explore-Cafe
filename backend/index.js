@@ -7,12 +7,13 @@ import userRoutes from "./route/user.route.js";
 import feedbackRouter from './route/feedback.js';
 // Update this line
 import ordersRoute from './route/orders.js';
+import razorpayRoutes from './route/razorpay.js';
 
 const app = express();
 dotenv.config();
 
 const PORT = process.env.PORT || 4000;
-const URI = process.env.MONGODB_URI; // Ensure the environment variable name matches your .env file
+const URI = process.env.MONGODB_URI;
 
 app.use(cors());
 app.use(express.json());
@@ -32,7 +33,10 @@ app.use("/menu", menuRoute);
 app.use("/users", userRoutes);
 app.use('/orders', ordersRoute);
 
-// Add feedback route
+// Remove the duplicate import here
+
+// Add this with your other app.use statements
+app.use('/api', razorpayRoutes);
 app.use('/feedback', feedbackRouter);
 
 app.listen(PORT, () => {

@@ -13,8 +13,25 @@ function Order() {
     note: ''
   });
 
+  // Razorpay configuration - Replace with your actual keys
+  const RAZORPAY_KEY_ID = 'rzp_test_g7TNWadsrEsyMV'; // Replace with your Razorpay Key ID
+  const RAZORPAY_SECRET = 'hZMBOQMAxE9LVzEGznxnUC9X'; // This should be kept on backend for security
+
   // In your useEffect of Order component
   useEffect(() => {
+    // Load Razorpay script
+    const loadRazorpayScript = () => {
+      return new Promise((resolve) => {
+        const script = document.createElement('script');
+        script.src = 'https://checkout.razorpay.com/v1/checkout.js';
+        script.onload = () => resolve(true);
+        script.onerror = () => resolve(false);
+        document.body.appendChild(script);
+      });
+    };
+
+    loadRazorpayScript();
+
     const selectedItem = localStorage.getItem('selectedMenuItem');
     if (selectedItem) {
       const parsedItem = JSON.parse(selectedItem);
@@ -80,40 +97,163 @@ function Order() {
   };
 
   const [orderPlaced, setOrderPlaced] = useState(false);
-    const [orderConfirmation, setOrderConfirmation] = useState(null);
-  
-    const handleSubmitOrder = async (e) => {
-      e.preventDefault();
-      if (cart.length === 0) {
-        alert('Please add items to your cart');
-        return;
-      }
-  
-      try {
-        const orderData = {
-          ...orderDetails,
-          items: cart,
-          total: calculateTotal(),
-          status: 'pending',
-          orderDate: new Date(),
-          paymentMethod: paymentMethod
-        };
-  
-        const response = await axios.post('http://localhost:4001/orders', orderData);
-        setOrderConfirmation(orderData);
-        setOrderPlaced(true);
-        setCart([]);
-        setOrderDetails({ name: '', phone: '', address: '', note: '' });
-        setCheckoutStep(4); // Add this line to move to the confirmation step
-      } catch (error) {
-        console.error('Error placing order:', error);
-        alert('Failed to place order. Please try again.');
+  const [orderConfirmation, setOrderConfirmation] = useState(null);
+  const [checkoutStep, setCheckoutStep] = useState(1);
+  const [paymentMethod, setPaymentMethod] = useState('cash');
+
+  // Razorpay payment handler
+  const handleRazorpayPayment = () => {
+    const amount = parseFloat(calculateTotal()) * 100; // Razorpay expects amount in paisa
+
+    const options = {
+      key: RAZORPAY_KEY_ID,
+      amount: amount,
+      currency: 'INR',
+      name: 'Food Delivery App',
+      description: 'Food Order Payment',
+      image: '/api/placeholder/200/200', // Your app logo
+      handler: async function (response) {
+        try {
+          // Verify payment on backend
+          const verificationResponse = await axios.post('http://localhost:4001/verify-payment', {
+            razorpay_order_id: response.razorpay_order_id,
+            razorpay_payment_id: response.razorpay_payment_id,
+            razorpay_signature: response.razorpay_signature,
+          });
+
+          if (verificationResponse.data.success) {
+            // Payment successful, place order
+            await placeOrder('online', response.razorpay_payment_id);
+          } else {
+            alert('Payment verification failed. Please try again.');
+          }
+        } catch (error) {
+          console.error('Payment verification error:', error);
+          alert('Payment verification failed. Please contact support.');
+        }
+      },
+      prefill: {
+        name: orderDetails.name,
+        email: '', // Add email field if you have it
+        contact: orderDetails.phone,
+      },
+      notes: {
+        address: orderDetails.address,
+        note: orderDetails.note,
+      },
+      theme: {
+        color: '#F59E0B', // Yellow color matching your theme
+      },
+      modal: {
+        ondismiss: function() {
+          console.log('Payment modal closed');
+        }
       }
     };
-  
-    // Add this case to renderStepContent switch statement
-  const [checkoutStep, setCheckoutStep] = useState(1); // Add this state
-  const [paymentMethod, setPaymentMethod] = useState('cash'); // Add payment method state
+
+    const paymentObject = new window.Razorpay(options);
+    paymentObject.open();
+  };
+
+  // Create Razorpay order
+  const createRazorpayOrder = async () => {
+    try {
+      const amount = parseFloat(calculateTotal()) * 100;
+      // Update the URL to match your backend route
+      const response = await axios.post('http://localhost:4001/api/create-razorpay-order', {
+        amount: amount,
+        currency: 'INR',
+      });
+
+      if (response.data.success) {
+        const options = {
+          key: RAZORPAY_KEY_ID,
+          amount: response.data.order.amount,
+          currency: response.data.order.currency,
+          name: 'Food Delivery App',
+          description: 'Food Order Payment',
+          image: '/api/placeholder/200/200',
+          order_id: response.data.order.id,
+          handler: async function (paymentResponse) {
+            try {
+              // Inside your handler function
+              const verificationResponse = await axios.post('http://localhost:4001/api/verify-payment', {
+                razorpay_order_id: paymentResponse.razorpay_order_id,
+                razorpay_payment_id: paymentResponse.razorpay_payment_id,
+                razorpay_signature: paymentResponse.razorpay_signature,
+              });
+
+              if (verificationResponse.data.success) {
+                await placeOrder('online', paymentResponse.razorpay_payment_id);
+              } else {
+                alert('Payment verification failed. Please try again.');
+              }
+            } catch (error) {
+              console.error('Payment verification error:', error);
+              alert('Payment verification failed. Please contact support.');
+            }
+          },
+          prefill: {
+            name: orderDetails.name,
+            contact: orderDetails.phone,
+          },
+          notes: {
+            address: orderDetails.address,
+            note: orderDetails.note,
+          },
+          theme: {
+            color: '#F59E0B',
+          },
+        };
+
+        const paymentObject = new window.Razorpay(options);
+        paymentObject.open();
+      }
+    } catch (error) {
+      console.error('Error creating Razorpay order:', error);
+      alert('Failed to initialize payment. Please try again.');
+    }
+  };
+
+  // Modified order placement function
+  const placeOrder = async (paymentType, paymentId = null) => {
+    try {
+      const orderData = {
+        ...orderDetails,
+        items: cart,
+        total: calculateTotal(),
+        status: 'pending',
+        orderDate: new Date(),
+        paymentMethod: paymentType,
+        paymentId: paymentId,
+        paymentStatus: paymentType === 'online' ? 'completed' : 'pending'
+      };
+
+      const response = await axios.post('http://localhost:4001/orders', orderData);
+      setOrderConfirmation(orderData);
+      setOrderPlaced(true);
+      setCart([]);
+      setOrderDetails({ name: '', phone: '', address: '', note: '' });
+      setCheckoutStep(4);
+    } catch (error) {
+      console.error('Error placing order:', error);
+      alert('Failed to place order. Please try again.');
+    }
+  };
+
+  const handleSubmitOrder = async (e) => {
+    e.preventDefault();
+    if (cart.length === 0) {
+      alert('Please add items to your cart');
+      return;
+    }
+
+    if (paymentMethod === 'cash') {
+      await placeOrder('cash');
+    } else if (paymentMethod === 'online') {
+      await createRazorpayOrder();
+    }
+  };
 
   const moveToNextStep = () => {
     if (cart.length === 0) {
@@ -357,9 +497,9 @@ function Order() {
 
               {/* Payment Method */}
               <div className="mb-6">
-                <h3 className="font-semibold mb-3">Payment Method</h3>
-                <div className="space-y-2">
-                  <label className="flex items-center space-x-3">
+                <h3 className="font-semibold mb-4 text-gray-900 dark:text-white">Payment Method</h3>
+                <div className="space-y-3">
+                  <label className="flex items-center space-x-3 p-3 border rounded-xl cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
                     <input
                       type="radio"
                       value="cash"
@@ -367,17 +507,38 @@ function Order() {
                       onChange={(e) => setPaymentMethod(e.target.value)}
                       className="form-radio text-yellow-600"
                     />
-                    <span>Cash on Delivery</span>
+                    <div className="flex items-center space-x-3">
+                      <div className="w-8 h-8 bg-green-500 rounded flex items-center justify-center">
+                        <svg className="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" />
+                        </svg>
+                      </div>
+                      <div>
+                        <div className="font-medium text-gray-900 dark:text-white">Cash on Delivery</div>
+                        <div className="text-sm text-gray-500">Pay when your order arrives</div>
+                      </div>
+                    </div>
                   </label>
-                  <label className="flex items-center space-x-3">
+                  
+                  <label className="flex items-center space-x-3 p-3 border rounded-xl cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
                     <input
                       type="radio"
-                      value="upi"
-                      checked={paymentMethod === 'upi'}
+                      value="online"
+                      checked={paymentMethod === 'online'}
                       onChange={(e) => setPaymentMethod(e.target.value)}
                       className="form-radio text-yellow-600"
                     />
-                    <span>UPI Payment</span>
+                    <div className="flex items-center space-x-3">
+                      <div className="w-8 h-8 bg-blue-500 rounded flex items-center justify-center">
+                        <svg className="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
+                        </svg>
+                      </div>
+                      <div>
+                        <div className="font-medium text-gray-900 dark:text-white">Online Payment</div>
+                        <div className="text-sm text-gray-500">Pay securely using Razorpay (Cards, UPI, Net Banking)</div>
+                      </div>
+                    </div>
                   </label>
                 </div>
               </div>
@@ -385,81 +546,108 @@ function Order() {
               <div className="flex gap-4">
                 <button
                   onClick={moveToPreviousStep}
-                  className="w-1/2 bg-gray-500 text-white py-3 rounded-xl hover:bg-gray-600"
+                  className="w-1/2 bg-gray-500 text-white py-3 rounded-xl hover:bg-gray-600 transition-all duration-200"
                 >
                   Back
                 </button>
                 <button
                   onClick={handleSubmitOrder}
-                  className="w-1/2 bg-yellow-500 text-white py-3 rounded-xl hover:bg-yellow-600"
+                  className="w-1/2 bg-yellow-500 text-white py-3 rounded-xl hover:bg-yellow-600 transition-all duration-200 flex items-center justify-center gap-2"
                 >
-                  Confirm Order
+                  {paymentMethod === 'online' ? (
+                    <>
+                      <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
+                      </svg>
+                      Pay Now
+                    </>
+                  ) : (
+                    'Confirm Order'
+                  )}
                 </button>
               </div>
             </motion.div>
           </div>
         );
 
-        case 4:
-      return (
-        <div className="max-w-2xl mx-auto">
-          <motion.div 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8"
-          >
-            <div className="text-center mb-8">
-              <div className="w-16 h-16 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-4">
-                <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
-                </svg>
-              </div>
-              <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Order Placed Successfully!</h2>
-              <p className="text-gray-600 dark:text-gray-300 mt-2">Thank you for your order.</p>
-            </div>
-  
-            <div className="space-y-6">
-              <div className="border-b pb-4">
-                <h3 className="font-semibold text-lg mb-3">Order Details</h3>
-                {orderConfirmation?.items.map((item) => (
-                  <div key={item._id} className="flex justify-between items-center py-2">
-                    <span className="text-gray-800 dark:text-white">{item.name} × {item.quantity}</span>
-                    <span className="text-yellow-600 font-semibold">₹{(item.price * item.quantity).toFixed(2)}</span>
-                  </div>
-                ))}
-                <div className="flex justify-between items-center pt-4 font-bold">
-                  <span>Total Amount</span>
-                  <span className="text-yellow-600">₹{orderConfirmation?.total}</span>
+      case 4:
+        return (
+          <div className="max-w-2xl mx-auto">
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8"
+            >
+              <div className="text-center mb-8">
+                <div className="w-16 h-16 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
+                  </svg>
                 </div>
+                <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Order Placed Successfully!</h2>
+                <p className="text-gray-600 dark:text-gray-300 mt-2">Thank you for your order.</p>
               </div>
-  
-              <div className="space-y-2">
-                <h3 className="font-semibold text-lg">Delivery Information</h3>
-                <p className="text-gray-700 dark:text-gray-300">{orderConfirmation?.name}</p>
-                <p className="text-gray-700 dark:text-gray-300">{orderConfirmation?.phone}</p>
-                <p className="text-gray-700 dark:text-gray-300">{orderConfirmation?.address}</p>
-                {orderConfirmation?.note && (
-                  <p className="text-gray-600 dark:text-gray-400 italic">Note: {orderConfirmation.note}</p>
-                )}
-              </div>
-  
-              <div>
-                <h3 className="font-semibold text-lg">Payment Method</h3>
-                <p className="text-gray-700 dark:text-gray-300 capitalize">{orderConfirmation?.paymentMethod}</p>
-              </div>
-  
-              <button
-                onClick={() => window.location.reload()}
-                className="w-full bg-yellow-500 text-white py-3 rounded-xl hover:bg-yellow-600 transition-all duration-200 mt-6"
-              >
-                Place New Order
-              </button>
-            </div>
-          </motion.div>
-        </div>
-      );
 
+              <div className="space-y-6">
+                <div className="border-b pb-4">
+                  <h3 className="font-semibold text-lg mb-3">Order Details</h3>
+                  {orderConfirmation?.items.map((item) => (
+                    <div key={item._id} className="flex justify-between items-center py-2">
+                      <span className="text-gray-800 dark:text-white">{item.name} × {item.quantity}</span>
+                      <span className="text-yellow-600 font-semibold">₹{(item.price * item.quantity).toFixed(2)}</span>
+                    </div>
+                  ))}
+                  <div className="flex justify-between items-center pt-4 font-bold">
+                    <span>Total Amount</span>
+                    <span className="text-yellow-600">₹{orderConfirmation?.total}</span>
+                  </div>
+                </div>
 
+                <div className="space-y-2">
+                  <h3 className="font-semibold text-lg">Delivery Information</h3>
+                  <p className="text-gray-700 dark:text-gray-300">{orderConfirmation?.name}</p>
+                  <p className="text-gray-700 dark:text-gray-300">{orderConfirmation?.phone}</p>
+                  <p className="text-gray-700 dark:text-gray-300">{orderConfirmation?.address}</p>
+                  {orderConfirmation?.note && (
+                    <p className="text-gray-600 dark:text-gray-400 italic">Note: {orderConfirmation.note}</p>
+                  )}
+                </div>
+
+                <div>
+                  <h3 className="font-semibold text-lg">Payment Information</h3>
+                  <div className="flex items-center gap-2">
+                    <span className="text-gray-700 dark:text-gray-300 capitalize">
+                      {orderConfirmation?.paymentMethod === 'online' ? 'Online Payment' : 'Cash on Delivery'}
+                    </span>
+                    {orderConfirmation?.paymentMethod === 'online' && (
+                      <span className="px-2 py-1 bg-green-100 text-green-800 text-xs rounded-full">
+                        ✓ Paid
+                      </span>
+                    )}
+                    {orderConfirmation?.paymentMethod === 'cash' && (
+                      <span className="px-2 py-1 bg-yellow-100 text-yellow-800 text-xs rounded-full">
+                        Pay on Delivery
+                      </span>
+                    )}
+                  </div>
+                  {orderConfirmation?.paymentId && (
+                    <p className="text-sm text-gray-500 mt-1">Payment ID: {orderConfirmation.paymentId}</p>
+                  )}
+                </div>
+
+                <button
+                  onClick={() => window.location.reload()}
+                  className="w-full bg-yellow-500 text-white py-3 rounded-xl hover:bg-yellow-600 transition-all duration-200 mt-6"
+                >
+                  Place New Order
+                </button>
+              </div>
+            </motion.div>
+          </div>
+        );
+
+      default:
+        return null;
     }
   };
 

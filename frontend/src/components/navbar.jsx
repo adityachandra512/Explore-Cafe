@@ -70,6 +70,7 @@ function Navbar() {
           About
         </a>
       </li>
+      
     </>
   );
 
@@ -119,12 +120,59 @@ function Navbar() {
             </svg>
           </label>
           {
-            authUser?(<Logout/>):(<div className="">
-            <a className="bg-black text-white px-3 py-2 rounded-md hover:bg-slate-800 duration-300 cursor-pointer" onClick={() =>document.getElementById("my_modal_3").showModal()}>
-              Login
-            </a>
-            <Login />
-          </div>)
+            authUser ? (
+              <div className="dropdown dropdown-end">
+                <div tabIndex={0} role="button" className="btn btn-ghost btn-circle">
+                  <div className="w-10 h-10 rounded-full bg-orange-500 flex items-center justify-center">
+                    <span className="text-xl font-bold text-white">
+                      {authUser.email.charAt(0).toUpperCase()}
+                    </span>
+                  </div>
+                </div>
+                <ul tabIndex={0} className="mt-3 z-[1] p-2 shadow-xl menu menu-sm dropdown-content bg-white dark:bg-gray-800 rounded-xl w-90 border border-gray-100 dark:border-gray-700 absolute right-0">
+                  <li className="px-4 py-3 border-b border-gray-100 dark:border-gray-700">
+                    <div className="flex items-center space-x-3">
+                      <div className="w-12 h-12 rounded-full bg-orange-500 flex items-center justify-center">
+                        <span className="text-2xl font-bold text-white">
+                          {authUser.email.charAt(0).toUpperCase()}
+                        </span>
+                      </div>
+                      <div>
+                        <div className="font-semibold text-gray-900 dark:text-white">{authUser.fullname}</div>
+                        <div className="text-sm text-gray-500 dark:text-gray-400">{authUser.email}</div>
+                      </div>
+                    </div>
+                  </li>
+                  <li>
+                    <a href="/profile" className="flex items-center px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-orange-50 dark:hover:bg-gray-700 rounded-lg transition-colors duration-150">
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                      </svg>
+                      Profile
+                    </a>
+                  </li>
+                  <li>
+                    <a href="/profile" className="flex items-center px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-orange-50 dark:hover:bg-gray-700 rounded-lg transition-colors duration-150">
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                      </svg>
+                      Order History
+                    </a>
+                  </li>
+                  <div className="px-2 py-2 border-t border-gray-100 dark:border-gray-700 mt-2">
+                    <Logout />
+                  </div>
+                </ul>
+              </div>
+            ) : (
+              <div className="">
+                <a className="bg-black text-white px-3 py-2 rounded-md hover:bg-slate-800 duration-300 cursor-pointer" 
+                   onClick={() => document.getElementById("my_modal_3").showModal()}>
+                  Login
+                </a>
+                <Login />
+              </div>
+            )
           }
         </div>
       </div>
