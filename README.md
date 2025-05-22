@@ -14,12 +14,63 @@ Explore Cafe is designed to elevate the restaurant experience with its robust fe
 
 ---
 
-## Screenshots 📸
+## 📸 Application Screenshots
 
-### 🎨 Home Page
-![Home Page](https://github.com/adityachandra512/soundHive/blob/master/public/Homepage.png)
+### 🏠 Homepage
+![Homepage](frontend/public/Homepage.png)
+Welcome to Explore Cafe - your gateway to delicious dining experiences.
 
+### 🍽️ Menu Page
+![Menu](frontend/public/Menu.png)
+Browse our extensive menu with beautifully presented dishes.
 
+### 👤 Admin Dashboard
+![Admin Dashboard](frontend/public/admindashboard.png)
+Powerful admin controls for restaurant management.
+
+### 👥 User Management
+![Admin Users](frontend/public/adminuser.png)
+Efficient user management interface for administrators.
+
+### 🛒 Shopping Cart
+![Cart](frontend/public/cart.png)
+User-friendly cart interface for easy ordering.
+
+### 💬 Feedback System
+![Feedback](frontend/public/feedback.png)
+Collect valuable customer feedback to improve services.
+
+### 📝 Order Process
+![Order Page](frontend/public/orderpage.png)
+Streamlined order placement interface.
+
+### 📋 Order Summary
+![Order Summary](frontend/public/ordersummery.png)
+Detailed order summary for review.
+
+### ✅ Order Completion
+![Order Complete](frontend/public/ordercomplete.png)
+Confirmation page for successful orders.
+
+### 💳 Payment Gateway
+![Payment Gateway](frontend/public/paymentgateway.png)
+Secure payment processing with Razorpay integration.
+
+### ✨ Payment Success
+![Payment Complete](frontend/public/paymentcomplete.png)
+Payment confirmation and order success page.
+
+### 👤 User Profile
+![Profile Page](frontend/public/profilepage.png)
+Personalized user profile management.
+
+### 📝 Sign Up
+![Sign Up](frontend/public/signup.png)
+User-friendly registration process.
+
+### ℹ️ About Us
+![About Us](frontend/public/aboutus.png)
+        
 ## 🛠️ Tech Stack Spotlight
 
 Explore Cafe leverages a powerful combination of technologies to deliver its seamless performance:
